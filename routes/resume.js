@@ -86,6 +86,13 @@ router.post(
         var data = await ResumeSchema.findByIdAndDelete(resume_id);
         console.log(data);
         var datas = await  UserSchema.findByIdAndUpdate(user_id,{$pull : {"resumes" : resume_id}});
+        //remove pdf file from this directory
+        fs.unlink(`${__dirname}/Resume${resume_id}.pdf`, (err) => {
+            if (err) {
+                console.log(err);
+                res.send(Promise.reject());
+            } else res.send(Promise.resolve());
+        });
         res.send(datas);
     }
 )

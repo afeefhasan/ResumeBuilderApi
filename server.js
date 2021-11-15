@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 var cors = require('cors');
 const bodyParser = require("body-parser")
 const uri = "mongodb+srv://afeef:afeef%401180@cluster0.kt9dn.mongodb.net/ResumeMaker?retryWrites=true&w=majority";
-
+require('dotenv').config();
 const connectToDatabase = async () => {
     try{
         await mongoose.connect(uri,{

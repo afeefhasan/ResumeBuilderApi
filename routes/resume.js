@@ -5,14 +5,14 @@ const { check,validationResult } = require('express-validator');
 const UserSchema = require('../schemas/user');
 const ResumeSchema = require('../schemas/resume');
 const pdfTemplate = require("../documents");
-
+require('dotenv').config();
 var admin = require("firebase-admin");
 
-var serviceAccount = require("../firebaseService.json");
+var serviceAccount = require("../firebaseService");
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'gs://resumestore-47107.appspot.com'
+  credential: admin.credential.cert(process.env.FIREBASE_CRED),
+  storageBucket: "gs://resumestore-47107.appspot.com"
 });
 var storage=admin.storage();
 const options = {

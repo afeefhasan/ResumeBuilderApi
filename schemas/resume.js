@@ -112,6 +112,7 @@ let ResumeSchemas = mongoose.Schema({
         }
     ],
     honors:[{
+        
             type:String
     }],
     user_id:{

@@ -6,6 +6,15 @@ const UserSchema = require('../schemas/user');
 const ResumeSchema = require('../schemas/resume');
 const pdfTemplate = require("../documents");
 
+var admin = require("firebase-admin");
+
+var serviceAccount = require("../firebaseService.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: 'gs://resumestore-47107.appspot.com'
+});
+var storage=admin.storage();
 const options = {
 	height: "42cm",
 	width: "29.7cm",
@@ -59,11 +68,32 @@ router.post(
                 "projects" : projects,"honors":honors});
             var data2=await ResumeSchema.findById(resume_id)
 
-            pdf.create(pdfTemplate(data2), options).toFile(`${__dirname}/Resume${resume_id}.pdf`, (err) => {
+            pdf.create(pdfTemplate(data2), options).toStream( (err,stream) => {
                 if (err) {
                     console.log(err);
                     res.send(Promise.reject());
-                } else res.send(Promise.resolve());
+                } else {
+                    var file = storage.bucket()
+                    .file(`/Resume${resume_id}.pdf`)
+                    .createWriteStream({
+                        resumable  : false,
+                        validation : false,
+                        contentType: "auto",
+                        metadata   : {
+                            'Cache-Control': 'public, max-age=31536000'}
+                    });
+
+                    stream.pipe(file)
+                    .on('error', function(err) {
+                    return res.status(500).send(err);
+                    })
+                    .on('finish', function(data) {
+                    stream.close();
+                    file.end();
+                    res.end();
+                    console.log('finished upload');
+                    });
+                }
             });
         }catch(error){
             console.log(error.message);
@@ -73,11 +103,23 @@ router.post(
 );
 router.post("/fetch-pdf", (req, res) => {
     let {resume_id}=req.body;
-	const file = `${__dirname}/Resume${resume_id}.pdf`;
 
+    //download pdf from firebase storage
+    var file = storage.bucket()
+    .file(`/Resume${resume_id}.pdf`)
+    .download({
+        destination: `D:/Resume${resume_id}.pdf`
+    }, function(err) {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({msg : "Server Error..."});
+        } else {
+            console.log('finished download');
+            return res.status(200).json({msg : "success"});
+        }
+    }
+    );
 
-
-	res.download(file);
 });
 router.post(
     '/delete',

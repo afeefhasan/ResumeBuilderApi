@@ -7,11 +7,11 @@ const ResumeSchema = require('../schemas/resume');
 const pdfTemplate = require("../documents");
 require('dotenv').config();
 var admin = require("firebase-admin");
-
-var serviceAccount = require("../firebaseService");
+console.log(process.env.FIREBASE_CRED);
+var serviceAccount = JSON.parse(process.env.FIREBASE_CRED)
 
 admin.initializeApp({
-  credential: admin.credential.cert(process.env.FIREBASE_CRED),
+  credential: admin.credential.cert(serviceAccount),
   storageBucket: "gs://resumestore-47107.appspot.com"
 });
 var storage=admin.storage();

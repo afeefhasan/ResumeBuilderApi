@@ -7,7 +7,7 @@ const ResumeSchema = require('../schemas/resume');
 const pdfTemplate = require("../documents");
 require('dotenv').config();
 var admin = require("firebase-admin");
-console.log(process.env.FIREBASE_CRED);
+
 var serviceAccount = JSON.parse(process.env.FIREBASE_CRED)
 
 admin.initializeApp({

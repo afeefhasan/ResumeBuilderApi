@@ -22,8 +22,7 @@ module.exports = (values) => {
 		skills,
 		honors
 	} = values;
-	//console log all the constants
-	console.log(firstname, lastname, email, phone, title, address, links, education, projects, experience, skills, honors);
+
 	let htmlTemplate = `
   <!DOCTYPE html>
     <html>

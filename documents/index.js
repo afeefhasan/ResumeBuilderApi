@@ -311,7 +311,7 @@ module.exports = (values) => {
             htmlTemplate+=`<p class="rela-block caps side-header">Skills</p>`;
         }   
 
-		console.log(skills.programinglanguages);
+	
 	if (skills.programinglanguages != null && skills.programinglanguages.length>0 )
 		htmlTemplate += `
 				<p class="rela-block list-thing">Programming Languages : ${skills.programinglanguages.map(skill =>skill)}</p>`;
@@ -320,11 +320,11 @@ module.exports = (values) => {
     ;
 	if (skills.tools != null && skills.tools.length>0)
 		htmlTemplate += `<p class="rela-block list-thing">Tools :  ${skills.tools.map(skill =>skill)}</p>`;
-	console.log(skills.databases);
+
 	if ( skills.databases != null && skills.databases.length >0 )
 		htmlTemplate += `<p class="rela-block list-thing">Databases : ${skills.databases.map(skill =>skill)}</p>`;
 
-		console.log(skills.databases);
+	
 	htmlTemplate += `
   			</div>
 			<div class="rela-block content-container">

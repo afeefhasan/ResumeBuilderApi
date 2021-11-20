@@ -129,11 +129,15 @@ router.post(
         console.log(data);
         var datas = await  UserSchema.findByIdAndUpdate(user_id,{$pull : {"resumes" : resume_id}});
         //remove pdf file from this directory
-        fs.unlink(`${__dirname}/Resume${resume_id}.pdf`, (err) => {
-            if (err) {
+        
+        file=storage.bucket().file(`/Resume${resume_id}.pdf`).delete(function(err){
+            if(err){
                 console.log(err);
-                res.send(Promise.reject());
-            } else res.send(Promise.resolve());
+                return res.status(500).json({msg : "Server Error..."});
+            }else{
+                console.log("file deleted");
+                return res.status(200).json({msg : "success"});
+            }
         });
         res.send(datas);
     }

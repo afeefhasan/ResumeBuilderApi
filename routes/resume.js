@@ -88,8 +88,13 @@ router.post(
                     return res.status(500).send(err);
                     })
                     .on('finish', function(data) {
+                       
+                    res.status(200).json({msg : "success"});
+
+
                     stream.close();
                     file.end();
+                    
                     res.end();
                     console.log('finished upload');
                     });
@@ -136,7 +141,7 @@ router.post(
                 return res.status(500).json({msg : "Server Error..."});
             }else{
                 console.log("file deleted");
-                return res.status(200).json({msg : "success"});
+                res.status(200).json({msg : "successfully deleted"});
             }
         });
         res.send(datas);
